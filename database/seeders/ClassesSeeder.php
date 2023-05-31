@@ -25,7 +25,7 @@ class ClassesSeeder extends Seeder
             ->state(
                 new Sequence(
                     ['name' => 'Section A'],
-                    ['name' => 'Sectiion B'],
+                    ['name' => 'Section B'],
                 )
             )
             ->has(

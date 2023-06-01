@@ -15,6 +15,7 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Columns\TagsColumn;
 
 class SectionResource extends Resource
 {
@@ -45,7 +46,9 @@ class SectionResource extends Resource
                 ->searchable(),
                 TextColumn::make('class.name')
                 ->sortable()
-                ->searchable()
+                ->searchable(),
+                TextColumn::make('students_count')->counts('students')
+                ->label('Students Counts')
             ])
             ->filters([
                 //
@@ -73,5 +76,10 @@ class SectionResource extends Resource
             'create' => Pages\CreateSection::route('/create'),
             'edit' => Pages\EditSection::route('/{record}/edit'),
         ];
-    }    
+    }
+
+     protected static function getNavigationBadge(): ?string
+    {
+        return self::$model::count();
+    }
 }

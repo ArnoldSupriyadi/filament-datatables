@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Actions\DeleteAction as ActionsDeleteAction;
+use Filament\Tables\Columns\TagsColumn;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -21,6 +22,7 @@ class ClassesResource extends Resource
 {
     protected static ?string $model = Classes::class;
 
+    
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
     public static function form(Form $form): Form
@@ -40,7 +42,10 @@ class ClassesResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
-                ->sortable()
+                ->sortable(),
+                TagsColumn::make('sections.name'),
+                TextColumn::make('students_count')->counts('students')
+                ->label('Students Counts')
             ])
             ->filters([
                 //
@@ -68,5 +73,10 @@ class ClassesResource extends Resource
             'create' => Pages\CreateClasses::route('/create'),
             'edit' => Pages\EditClasses::route('/{record}/edit'),
         ];
-    }    
+    }
+    
+    protected static function getNavigationBadge(): ?string
+    {
+        return self::$model::count();
+    }
 }

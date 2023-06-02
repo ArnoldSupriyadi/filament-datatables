@@ -2,17 +2,22 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Classes;
+use App\Models\Section;
+use App\Models\Student;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Card;
 
 class StatsOverview extends BaseWidget
 {
+    protected static ?int $sort = 1;
+    
     protected function getCards(): array
     {
         return [
-            Card::make('Total Student', '192.1k'),
-            Card::make('Total Classes', '21%'),
-            Card::make('Total Section', '3:12'),
+            Card::make('Total Student', Student::count()),
+            Card::make('Total Classes', Classes::count()),
+            Card::make('Total Section', Section::count()),
         ];
     }
 }

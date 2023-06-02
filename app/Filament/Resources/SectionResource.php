@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\SectionResource\Pages;
 use App\Filament\Resources\SectionResource\RelationManagers;
 use App\Models\Section;
+use Closure;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms;
 use Filament\Resources\Form;
@@ -16,6 +17,7 @@ use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\TagsColumn;
+use Illuminate\Validation\Rules\Unique;
 
 class SectionResource extends Resource
 {
@@ -30,7 +32,9 @@ class SectionResource extends Resource
                 TextInput::make('name')
                 ->required()
                 ->autofocus()
-                ->unique()
+                ->unique(ignoreRecord: true, callback: function(Closure $get, Unique $rule){
+                    return $rule->where('class_id', $get('class_id'));
+                })
                 ->placeholder('Enter a Section Name'),
                 Select::make('class_id')
                 ->relationship('class', 'name')
